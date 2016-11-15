@@ -1,0 +1,67 @@
+
+<html>
+  <style>
+    body{ 
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
+
+<body>
+  <h1>This is your most up to date library!</h1>
+<!---  <div>{{data}}</div>
+--!>
+<!---  <div>
+    {% for n in data %}
+    <div>{{n}}</div>
+    {% endfor %}
+  </div>
+--!>
+
+  <table style="width:100%">
+    <thead>
+    <td>
+      <td>Library Name</td>
+      <td>Song ID</td>
+      <td>Song</td>
+      <td>Artist</td>
+      <td>Album</td>
+      <td>Song Length</td>
+      <td>Album Genre</td>
+      <td>Album Release Date</td>
+    </td>
+    </thead>
+    <tbody>
+    {% for song in data %}
+    <tr>
+      <td style ="text-align: center; vertical-align: middle;">
+      </td>
+      <td>{{song[0]}}</td>
+      <td>{{song[1]}}</td>
+      <td>{{song[2]}}</td>
+      <td>{{song[3]}}</td>
+      <td>{{song[4]}}</td>
+      <td>{{song[5]}}</td>
+      <td>{{song[6]}}</td>
+      <td>{{song[7]}}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <p><b>For security purposes you must login again to see song recommendations based on the music you have in your library</b></br>
+  <form action="/song_recommender" method="post">
+    <input type="text" name="sid" style="display:none;"></br>
+    <label><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uid" required>
+    <label><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="pw" required>
+    <button type="submit">View song recommendations</button>
+  </form></p>
+
+
+<p><a href="/">Return to home</a></p>
+
+</body>
+</html>

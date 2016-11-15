@@ -1,0 +1,69 @@
+
+
+<html>
+  <style>
+    body{ 
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
+
+<body>
+  <h1>Based on your library, we recommend the following songs for you:</h1>
+<!---  <div>{{data}}</div>
+
+  <div>
+    {% for n in data %}
+    <div>{{n}}</div>
+    {% endfor %}
+  </div>
+--!>
+
+  <table style="width:100%">
+    <thead>
+    <td>
+      <td>Song ID</td>
+      <td>Song</td>
+      <td>Artist</td>
+      <td>Album</td>
+      <td>Song Length</td>
+      <td>Album Genre</td>
+      <td>Album Release Date</td>
+    </td>
+    </thead>
+    <tbody>
+    {% for song in data %}
+    <tr>
+      <td style ="text-align: center; vertical-align: middle;">
+      </td>
+      <td>{{song[0]}}</td>
+      <td>{{song[1]}}</td>
+      <td>{{song[2]}}</td>
+      <td>{{song[3]}}</td>
+      <td>{{song[4]}}</td>
+      <td>{{song[5]}}</td>
+      <td>{{song[6]}}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <p><b>Add Songs to your library:</b></br>
+  <font size="-2"><i>Separate Song ID's by comma</i></font></br>
+  <font size="-2"><i>Leave Song ID field blank to simply view your library</i></font></br>
+  <form action="/my_library" method="post" name="add_to_library">
+    <label><b>Song ID's</b></label>
+    <input type="text" placeholder="ex. 4, 2" name="sid"></br>
+    <label><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uid" required>
+    <label><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="pw" required>
+    <button type="submit">Login and Add Songs to Library</button>
+  </form></p>
+
+<p><a href="/">Go back to home page</a></p>
+
+
+</body>
+</html>

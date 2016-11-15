@@ -1,0 +1,66 @@
+<html>
+  <style>
+    body{
+      font-size: 15pt;
+      font-family: arial;
+    }
+  </style>
+
+
+  <h1>Your search results yielded:</h1>
+<!---  <div>{{data}}</div>
+--!>
+  <div>
+    {% for n in data %}
+    <div>{{n}}</div>
+    {% endfor %}
+  </div>
+
+  <form action="/my_library" method="post" name="table">
+  <div id="table_container">
+  <table style="width:100%">
+    <thead>
+    <td>
+      <td>Song</td>
+      <td>Artist</td>
+      <td>Album</td>
+      <td>Song Length</td>
+      <td>Album Genre</td>
+      <td>Album Release Date</td>
+    </td>
+    </thead>
+    <tbody>
+    {% for song in data %}
+    <tr>
+      <td style ="text-align: center; vertical-align: middle;">
+      <input type = "checkbox" name="check_songs">
+      </td>
+      <td>{{song[1]}}</td>
+      <td>{{song[2]}}</td>
+      <td>{{song[3]}}</td>
+      <td>{{song[4]}}</td>
+      <td>{{song[5]}}</td>
+      <td>{{song[6]}}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+
+    <tr> 
+      <label><b>Username</b></label>
+      <input type="text" placeholder="Enter Username" name="uname" required>
+      <p><label><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="psw" required></p>
+      <p><button type="submit">Login and Add Songs to Library</button></p>
+    </tr>
+
+  </table>
+  </form>
+
+
+  <h2>Search for a song by:</h2>
+  <form method="POST" action="/search_by_song">
+  <p>song name: <input type="text" name="song"> <input type="submit" value="Submit"></p>
+
+</body>
+</form>
+</html>
