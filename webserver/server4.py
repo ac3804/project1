@@ -62,6 +62,15 @@ engine = create_engine(DATABASEURI)
 # 
 # The setup code should be deleted once you switch to using the Part 2 postgresql database
 #
+'''
+engine.execute("""DROP TABLE IF EXISTS test;""")
+engine.execute("""CREATE TABLE IF NOT EXISTS test (
+  id serial,
+  name text
+);""")
+engine.execute("""INSERT INTO test(name) VALUES ('grace hopper'), ('alan turing'), ('ada lovelace');""")
+
+'''
 #
 # END SQLITE SETUP CODE
 #
@@ -122,9 +131,18 @@ def index():
   """
 
   # DEBUG: this is debugging code to see what request looks like
+  print request.args
   return render_template("index.html")
 
   #
+  # example of a database query
+  #
+'''  cursor = g.conn.execute("SELECT name FROM test")
+  names = []
+  for result in cursor:
+    names.append(result['name'])  # can also be accessed using result[0]
+  cursor.close()
+'''
   #
   # Flask uses Jinja templates, which is an extension to HTML where you can
   # pass data to a template and dynamically generate HTML based on the data
@@ -170,19 +188,26 @@ def index():
 #
 
 
+# Example of adding new data to the database
+'''@app.route('/add', methods=['POST'])
+def add():
+  name = request.form['name']
+  print name
+  cmd = 'INSERT INTO test(name) VALUES (:name1), (:name2)';
+  g.conn.execute(text(cmd), name1 = name, name2 = name);
+  return redirect('/')
+'''
 
 @app.route('/my_library', methods=['POST'])
 def add():
   songid_form = request.form['sid']
-  songid_stringarray = []
+  songid_array = []
   if songid_form != '':
     songid_stringarray = songid_form.split(',')
-  for i in songid_stringarray:
-    i = i.replace(' ','')
-    if i.isdigit()==False:
-      return render_template("bad_input.html")
-  songid_array = []
-  songid_array = [int(i) for i in songid_stringarray]
+    # songid_array = [int(i) for i in songid_stringarray]
+    for i in songid_stringarray:
+      if i.isdigit()==False:
+        return render_template("bad_input.html")
   username = request.form['uid']
   password = request.form['pw']
   cursor1 = g.conn.execute("select u.password from users as u where u.uid = %s", username)
@@ -206,7 +231,6 @@ def add():
   songsgeneral = []
   for result in cursor:
     songrow = []
-    songrow.append(result['library'])
     songrow.append(result['song_id'])
     songrow.append(result['song'])
     songrow.append(result['artist'])
@@ -249,7 +273,6 @@ def add():
       songsgeneral = []
       for result in cursor:
         songrow = []
-        songrow.append(result['library'])
         songrow.append(result['song_id'])
         songrow.append(result['song'])
         songrow.append(result['artist'])
@@ -283,6 +306,7 @@ def search_by_song():
     songsgeneral.append(songrow)
 
   cursor.close()
+  print songsgeneral
   context = dict(data=songsgeneral)
   return render_template("search.html", **context)
 
@@ -305,6 +329,7 @@ def search_by_artist():
     songrow.append(result['release_date'])
     songsgeneral.append(songrow)
   cursor.close()
+  print songsgeneral
   context = dict(data=songsgeneral)
   return render_template("search.html", **context)
 
@@ -328,8 +353,15 @@ def search_by_album():
     songrow.append(result['release_date'])
     songsgeneral.append(songrow)
   cursor.close()
+  print songsgeneral
   context = dict(data=songsgeneral)
   return render_template("search.html", **context)
+
+
+@app.route('/search',methods=['POST'])
+def search():
+  return render_template("search.html")
+
 
 
 @app.route('/song_recommender', methods=['POST'])
@@ -384,8 +416,6 @@ def song_recommender():
   cmd6 = "INSERT into comp_playlist(p_user, p_id, date_created) VALUES (%s, %s, CURRENT_DATE)"
   cursor7 = g.conn.execute(cmd6, (username, pid))
   cursor7.close()
-  playlist_songs_set = set(playlist_songs)
-  playlist_songs = playlist_songs_set
   cmd7 = "INSERT into song_in_play(play_id, song_id, date_added) VALUES (%s, %s, CURRENT_DATE)"
   for song in playlist_songs:
     cursor8 = g.conn.execute(cmd7, (pid, song))
@@ -408,6 +438,11 @@ def song_recommender():
   context = dict(data=songsgeneral)
  
   return render_template("song_recommender.html", **context)
+
+@app.route('/login')
+def login():
+    abort(401)
+    this_is_never_executed()
 
 
 if __name__ == "__main__":
